@@ -1,0 +1,23 @@
+require("wget")
+
+local _adress = "http://localhost"
+local _port = 8000
+local _url = _adress .. ":" .. _port .. "/"
+term.setCursorBlink(false)
+term.clear()
+term.setCursorPos(1, 1)
+term.write("Starting up")
+term.write(".")
+sleep(0)
+term.write(".")
+sleep(0)
+term.write(".")
+term.setCursorPos(1, 2)
+sleep(1)
+wget.runUrl(_url .. "install.lua")
+sleep(1)
+term.clear()
+term.setCursorPos(1, 1)
+term.write("Welcome to ManOs")
+term.setCursorPos(1, 2)
+term.setCursorBlink(true)
