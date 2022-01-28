@@ -9,6 +9,7 @@ local toInstall = {
     {path = "red.lua", url = _url .. "red.lua"},
     {path = "wget.lua", url = _url .. "wget.lua"},
     {path = "reader.lua", url = _url .. "reader.lua"},
+    {path = "logger.lua", url = _url .. "logger.lua"},
     {path = "startup", url = _url .. "startup"},
 }
 

@@ -1,14 +1,18 @@
+local logger = require("logger")
+logger.setModuleName("TheOS")
+logger.setName("Reader")
+
 local module = {
     read_file = function (path)
         if not fs.exists(path) then
-            --Todo: logger: path don't exist!
+            logger.log("Path don't exist!")
             return
         end
 
         local file = fs.open(path, "r")
 
         if not file then
-            --Todo: logger: cannot open file!
+            logger.log("cannot open file! " .. path)
             return
         end
 
@@ -16,14 +20,14 @@ local module = {
         file.close()
 
         if not content then
-            --Todo: logger: the file is empty!
+            logger.log("this file is invalid! " .. path)
             return
         end
 
         local _table = table.unpack(content)
 
         if not _table then
-            --Todo: logger: cannot un pack!
+            logger.log("cannot unpack! " .. path)
             return
         end
 
@@ -32,12 +36,12 @@ local module = {
 
     write_file = function (path, data, only_if_not_exists)
         if not path then
-            --Todo: logger: file is null!
+            logger.log("path is null!")
             return
         end
 
         if not data then
-            --Todo: logger: data is null!
+            logger.log("data is null")
             return
         end
 
@@ -50,7 +54,7 @@ local module = {
         local file = fs.open(path, "w")
 
         if not file then
-            --Todo: logger: cannot open file
+            logger.log("cannot open file! " .. path)
             return
         end
 
