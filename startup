@@ -1,6 +1,6 @@
 require("wget")
 
-local _url = "http://raw.githubusercontent.com/konkitoman/ManOS/master/"
+local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
 
 term.setCursorBlink(false)
 term.clear()
