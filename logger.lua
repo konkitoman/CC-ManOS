@@ -18,9 +18,9 @@ local module = {
             content = ""
         end
         if not no_end_line then
-            content = content .. "[" .. module_name .. "] " .. name .. text .. "\n"
+            content = content .. "[" .. module_name .. "] " .. name .. " " .. text .. "\n"
         else
-            content = content .. "[" .. module_name .. "] " .. name .. text 
+            content = content .. "[" .. module_name .. "] " .. name .. " " .. text
         end
         local _file = fs.open("log.txt", "w")
         if not _file then

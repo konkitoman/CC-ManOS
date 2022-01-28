@@ -24,7 +24,7 @@ local module = {
             return
         end
 
-        local _table = table.unpack(content)
+        local _table = textutils.unserialise(content)
 
         if not _table then
             logger.log("cannot unpack! " .. path)
@@ -49,7 +49,7 @@ local module = {
             return
         end
 
-        local _str = table.pack(data)
+        local _str = textutils.serialise(data)
 
         local file = fs.open(path, "w")
 
