@@ -1,4 +1,4 @@
-p_red = {
+local module = {
     none = 0,
     white = 1,
     orange = 2,
@@ -17,3 +17,5 @@ p_red = {
     red = 16384,
     black = 32768,
 }
+
+return module

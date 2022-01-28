@@ -6,9 +6,10 @@ end
 local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
 
 local toInstall = {
-    {path = "utils.lua", url = _url .. "utils.lua"},
+    {path = "red.lua", url = _url .. "red.lua"},
     {path = "wget.lua", url = _url .. "wget.lua"},
-    {path = "startup", url = _url .. "startup"}
+    {path = "reader.lua", url = _url .. "reader.lua"},
+    {path = "startup", url = _url .. "startup"},
 }
 
 local wget = {

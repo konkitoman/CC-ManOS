@@ -1,0 +1,53 @@
+local reader = require("reader")
+local red = require("red")
+
+local default_data = {
+    lava = false,
+    water = false
+}
+
+local default_config = {
+    wire_lava = { side = "right", r = red.orange },
+    wire_water = { side = "right", r = red.blue }
+}
+
+local function setup(path)
+    local _data_path = path .. "data"
+    local _config_path = path .. "config"
+
+    reader.write_file(_data_path, default_data, true)
+    reader.write_file(_config_path, default_config, true)
+
+    local data = reader.read_file(_data_path)
+    local config = reader.read_file(_config_path)
+
+    local function save()
+        reader.write_file(_data_path, data)
+    end
+
+    local function getData()
+        return reader.read_file(_data_path)
+    end
+
+    local function setData(_data)
+        data = _data
+        save()
+    end
+
+    local obj = {
+        setData = setData,
+        getData = getData,
+        config = config
+    }
+
+    local commander = require(path .. "commander")
+    commander.run(obj)
+
+end
+
+local module = {
+    to_install = {{res = "commander.lua", path = "commander.lua"}},
+    setup = setup
+}
+
+return module
