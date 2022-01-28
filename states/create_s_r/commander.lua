@@ -2,6 +2,7 @@ local red = require("red")
 
 local function setToggle(side, wire)
     redstone.setBundledOutput(side, wire)
+    sleep(1)
     redstone.setBundledOutput(side, red.none)
 end
 
