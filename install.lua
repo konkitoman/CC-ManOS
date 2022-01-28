@@ -3,9 +3,7 @@ if not http then
     return
 end
 
-local _adress = "http://localhost"
-local _port = 8000
-local _url = _adress .. ":".. _port .. "/"
+local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
 
 local toInstall = {
     {path = "utils.lua", url = _url .. "utils.lua"},
