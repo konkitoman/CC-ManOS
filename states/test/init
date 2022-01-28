@@ -1,0 +1,10 @@
+local module = {
+    to_install = {{res = "sesntials.lua", path = "sesntials.lua"}},
+    setup = function (path)
+        require(path .. "sesntials")
+        print("Module setup!")
+        run()
+    end
+}
+
+return module

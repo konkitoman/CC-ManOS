@@ -14,6 +14,7 @@ wget = {
         local response = http.get(url)
         if not response then
             print("Server don't have that file!")
+            return
         end
         local data = response.readAll()
         response.close()
@@ -36,7 +37,7 @@ wget = {
 
         local res = wget.get(url)
         if not res then return end
-        local file = fs.open("wb")
+        local file = fs.open(filename_and_path, "wb")
         if not file then
             print("Cannot create file!")
             return
