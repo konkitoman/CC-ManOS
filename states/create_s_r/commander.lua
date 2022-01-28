@@ -26,8 +26,8 @@ local module = {
                     ended = true
                     break
                 elseif args[1] == "status" then
-                    print("water: " .. data.water)
-                    print("lava: " .. data.lava)
+                    print("water: " .. tostring(data.water))
+                    print("lava: " .. tostring(data.lava))
                 elseif args[1] == "water" then
                     if data.water then
                         break
@@ -39,6 +39,7 @@ local module = {
                     sleep(6)
                     setToggle(obj.config.wire_water.side, obj.config.wire_water.r)
                     data.water = true
+                    print("Enabled water!")
                 elseif args[1] == "lava" then
                     if data.lava then
                         break
@@ -50,6 +51,23 @@ local module = {
                     sleep(6)
                     setToggle(obj.config.wire_lava.side, obj.config.wire_lava.r)
                     data.lava = true
+                    print("Enabled lava!")
+                elseif args[1] == "disable" then
+                    if data.lava then
+                        setToggle(obj.config.wire_lava.side, obj.config.wire_lava.r)
+                        data.lava = false
+                    end
+                    if data.water then
+                        setToggle(obj.config.wire_water.side, obj.config.wire_water.r)
+                        data.water = false
+                    end
+                    print("Disabled all!")
+                elseif args[1] == "help" then
+                    print("status")
+                    print("lava")
+                    print("water")
+                    print("disable")
+                    print("quit")
                 end
 
                 obj.setData(data)
