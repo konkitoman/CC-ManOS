@@ -6,8 +6,11 @@ local function setToggle(side, wire)
     redstone.setBundledOutput(side, red.none)
 end
 
+local version = "0.0.1"
+
 local module = {
     run = function (obj)
+        print("Create_s_r: Commander: Version: " .. version)
         local ended = false
         while not ended do
             while true do
@@ -36,8 +39,8 @@ local module = {
                     if data.lava then
                         setToggle(obj.config.wire_lava.side, obj.config.wire_lava.r)
                         data.lava = false
+                        sleep(6)
                     end
-                    sleep(6)
                     setToggle(obj.config.wire_water.side, obj.config.wire_water.r)
                     data.water = true
                     print("Enabled water!")
@@ -48,8 +51,8 @@ local module = {
                     if data.water then
                         setToggle(obj.config.wire_water.side, obj.config.wire_water.r)
                         data.water = false
+                        sleep(4)
                     end
-                    sleep(6)
                     setToggle(obj.config.wire_lava.side, obj.config.wire_lava.r)
                     data.lava = true
                     print("Enabled lava!")
