@@ -1,7 +1,7 @@
 local module = {
-    to_install = {{res = "sesntials.lua", path = "sesntials.lua"}},
+    to_install = {{res = "essentials.lua", path = "essentials.lua"}},
     setup = function (path)
-        require(path .. "sesntials")
+        require(path .. "essentials")
         print("Module setup!")
         run()
     end
