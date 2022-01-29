@@ -3,13 +3,16 @@ if not http then
     return
 end
 
-local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
+--local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
+local _url = "http://localhost:8000/"
 
 local toInstall = {
     {path = "red.lua", url = _url .. "red.lua"},
     {path = "wget.lua", url = _url .. "wget.lua"},
     {path = "reader.lua", url = _url .. "reader.lua"},
     {path = "logger.lua", url = _url .. "logger.lua"},
+    {path = "event_loop.lua", url = _url .. "event_loop.lua"},
+    {path = "gui.lua", url = _url .. "gui.lua"},
     {path = "startup", url = _url .. "startup"},
 }
 
