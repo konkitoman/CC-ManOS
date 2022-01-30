@@ -113,7 +113,7 @@ local function renderButton(button, screen)
     local size = (button._size_x + button._x) / 2
     local to_ocupate = size - text_length
     local Xto_ocupate = to_ocupate
-    local Yto_ocupate = (button._size_y + button._y) / 2
+    local Yto_ocupate = (button._size_y + button._y) - 2
     local count = 0
     for x = button._x, button._x + Xto_ocupate + button._size_x - Xto_ocupate do
         screen.setCursorPos(x, Yto_ocupate)
@@ -200,6 +200,12 @@ local module = {
             childs = {},
             on_update = nil,
             on_render = nil,
+            add_update_lisener = function (self, callback)
+                self.on_update = callback
+            end,
+            add_render_lisener = function (self, callback)
+                self.on_render = callback
+            end,
             add_child = function (self, child)
                 table.insert(self.childs, child)
             end,
@@ -293,6 +299,11 @@ local module = {
                         self:on_press()
                     end
                 end
+            end,
+            setText = function(self, text)
+                local length = #text + 2
+                self.text = text
+                self.size_x = length
             end
         }
     end,
