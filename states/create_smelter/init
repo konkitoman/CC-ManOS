@@ -15,10 +15,15 @@ local default_data = {
 
 local default_config = {
     wire_lava = "orange",
+    fire_enable = true,
     wire_water = "blue",
     wire_crusher = "magenta",
     wire_press = "white",
     wire_fire = "yellow",
+    lava_enable = true,
+    water_enable = true,
+    crusher_enable = true,
+    press_enable = true,
     red_side = "right",
     monitor = "top"
 }
@@ -30,6 +35,11 @@ local createConfig = function(config)
         wire_crusher = red:from_str(config.wire_crusher),
         wire_press = red:from_str(config.wire_press),
         wire_fire = red:from_str(config.wire_fire),
+        lava_enable = config.lava_enable,
+        fire_enable = config.fire_enable,
+        water_enable = config.water_enable,
+        crusher_enable = config.crusher_enable,
+        press_enable = config.press_enable,
         red_side = config.red_side,
         monitor = peripheral.wrap(config.monitor)
     }
@@ -593,12 +603,22 @@ local update = function (loop, event)
 
         --main penal add all elements
         main_panel:add_child(background)
-        main_panel:add_child(lava_button)
-        main_panel:add_child(water_button)
+        if config.lava_enable then
+            main_panel:add_child(lava_button)
+        end
+        if config.fire_enable then
+            main_panel:add_child(fire_button)
+        end
+        if config.water_enable then
+            main_panel:add_child(water_button)
+        end
+        if config.crusher_enable then
+            main_panel:add_child(crusher_button)
+        end
+        if config.press_enable then
+            main_panel:add_child(press_button)
+        end
         main_panel:add_child(disable_button)
-        main_panel:add_child(crusher_button)
-        main_panel:add_child(press_button)
-        main_panel:add_child(fire_button)
         --adding main panel to gui
 
         gui:add_panel(main_panel)
