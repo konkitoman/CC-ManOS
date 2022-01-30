@@ -9,6 +9,7 @@ local default_data = {
     water = false,
     crusher = false,
     press = false,
+    fire = false,
     red_output = 0
 }
 
@@ -17,6 +18,7 @@ local default_config = {
     wire_water = "blue",
     wire_crusher = "magenta",
     wire_press = "white",
+    wire_fire = "yellow",
     red_side = "right",
     monitor = "top"
 }
@@ -27,6 +29,7 @@ local createConfig = function(config)
         wire_water = red:from_str(config.wire_water),
         wire_crusher = red:from_str(config.wire_crusher),
         wire_press = red:from_str(config.wire_press),
+        wire_fire = red:from_str(config.wire_fire),
         red_side = config.red_side,
         monitor = peripheral.wrap(config.monitor)
     }
@@ -44,6 +47,7 @@ local water_button = nil
 local disable_button = nil
 local crusher_button = nil
 local press_button = nil
+local fire_button = nil
 
 -- redstone bundled output
 
@@ -82,6 +86,7 @@ local is_used_lava = false
 local is_used_water = false
 local is_used_crusher = false
 local is_used_press = false
+local is_used_fire = false
 
 -- set all buttons text and color
 
@@ -142,6 +147,22 @@ local function set_text()
             press_button.background_color = colors.green
         end
     end
+
+    if is_used_fire then
+        fire_button:setText("Working: fire")
+        fire_button.background_color = colors.yellow
+    else
+        if data.fire == true then
+            
+            fire_button:setText("Disable: fire")
+            fire_button.background_color = colors.orange
+        else
+            fire_button:setText("Enable: fire")
+            fire_button.background_color = colors.green
+        end
+    end
+
+    gui.requestRender()
 end
 
 --Button actions
@@ -158,6 +179,9 @@ local function on_lava(state)
         gui.requestRender()
         return
     end
+    if data.fire then
+        is_used_fire = true
+    end
     if data.lava == true then
         toggle_red(config.wire_lava)
         data.lava = false
@@ -166,7 +190,7 @@ local function on_lava(state)
         set_text()
         gui.requestRender()
 
-        event_loop:add_coroutine("on_lava", on_lava, {1}, 7)
+        event_loop:add_coroutine("on_lava", on_lava, {1}, 8)
         return
     end
     if data.water == true then
@@ -181,8 +205,10 @@ local function on_lava(state)
     end
     toggle_red(config.wire_lava)
     data.lava = true
+    data.fire = false
 
     is_used_lava = false
+    is_used_fire = false
 
     setData(data)
     set_text()
@@ -199,7 +225,7 @@ local on_press_lava = function(button)
     event_loop:add_coroutine("on_release_lava", on_released_lava, nil, press_delay)
     gui.requestRender()
 
-    if is_used_lava or is_used_water then
+    if is_used_lava or is_used_water or is_used_fire then
         return
     end
     is_used_lava = true
@@ -215,6 +241,9 @@ local function on_water(state)
         return
     end
     data = getData()
+    if data.fire then
+        is_used_fire = true
+    end
     if data.water == true then
         toggle_red(config.wire_water)
         data.water = false
@@ -231,7 +260,7 @@ local function on_water(state)
 
         toggle_red(config.wire_lava)
         data.lava = false
-        event_loop:add_coroutine("on_water", on_water, nil, 7)
+        event_loop:add_coroutine("on_water", on_water, nil, 8)
 
         setData(data)
         set_text()
@@ -240,9 +269,11 @@ local function on_water(state)
     end
     toggle_red(config.wire_water)
     data.water = true
+    data.fire = false
 
     is_used_water = false
     is_used_lava = false
+    is_used_fire = false
 
     setData(data)
     set_text()
@@ -259,7 +290,7 @@ local on_press_water = function (button)
     event_loop:add_coroutine("on_release_water", on_released_water, nil, press_delay)
     gui.requestRender()
 
-    if is_used_water or is_used_lava then
+    if is_used_water or is_used_lava or is_used_fire then
         return
     end
     is_used_water = true
@@ -268,7 +299,12 @@ end
 
 -- Disable button actions!
 
-local function on_disable()
+local function on_disable(state)
+    if state then
+        toggle_red(config.wire_water)
+        data.water = false
+        data.fire = false
+    end
     data = getData()
     if data.water == true then
         toggle_red(config.wire_water)
@@ -286,11 +322,18 @@ local function on_disable()
         sub_red(config.wire_press)
         data.press = false
     end
+    if data.fire == true then
+        toggle_red(config.wire_water)
+        data.water = true
+        data.fire = false
+        event_loop:add_coroutine("on_disable", on_disable, {1}, 2)
+    end
 
     is_used_water = false
     is_used_lava = false
     is_used_press = false
     is_used_crusher = false
+    is_used_fire = false
 
     setData(data)
     set_text()
@@ -313,6 +356,7 @@ local on_press_disable = function (button)
     is_used_water = true
     is_used_crusher = true
     is_used_press = true
+    is_used_fire = true
 
     event_loop:add_coroutine("on_disable", on_disable, nil, 0.2)
 end
@@ -369,7 +413,6 @@ local function on_press()
     setData(data)
     set_text()
     gui.requestRender()
-
 end
 
 local on_released_press = function ()
@@ -390,9 +433,114 @@ local on_press_press = function (button)
     event_loop:add_coroutine("on_press", on_press, nil, 0.2)
 end
 
-local function on_coroutine(coroutine)
-    print(coroutine.name)
+--Fire button actions!
+
+local fire_state = 0
+
+local function on_fire(state)
+    data = getData()
+    if state then
+        if state == 1 then
+            is_used_water = false
+
+            setData(data)
+            set_text()
+        end
+        if state == 2 then
+            is_used_lava = false
+
+            setData(data)
+            set_text()
+        end
+        fire_state = fire_state + state
+        if fire_state == 3 then
+            toggle_red(config.wire_fire)
+            data.fire = true
+            event_loop:add_coroutine("on_fire", on_fire, {2}, 4)
+
+            setData(data)
+            set_text()
+        end
+        if fire_state == 4 then
+            toggle_red(config.wire_water)
+            data.water = false
+            event_loop:add_coroutine("on_fire", on_fire, {5}, 3)
+
+            setData(data)
+            set_text()
+        end
+        if fire_state == 5 then
+            is_used_fire = false
+            setData(data)
+
+            set_text()
+        end
+        if fire_state == 9 then
+            data.fire = false
+            is_used_water = false
+            is_used_fire = false
+            setData(data)
+            set_text()
+        end
+        return
+    end
+
+    fire_state = 0
+
+    is_used_fire = true
+    local lava_time = 0
+    local water_time = 0
+
+    if data.fire == true then
+        is_used_water = true
+        toggle_red(config.wire_water)
+        data.water = true
+        event_loop:add_coroutine("on_fire", on_fire, {4}, 2)
+
+        setData(data)
+        set_text()
+        return
+    end
+
+    if data.water == true then
+        is_used_water = true
+        toggle_red(config.wire_water)
+        data.water = false
+        water_time = 3
+    end
+    if data.lava == true then
+        is_used_lava = true
+        toggle_red(config.wire_lava)
+        data.lava = false
+        lava_time = 7
+    end
+
+    setData(data)
+    set_text()
+
+    event_loop:add_coroutine("on_fire", on_fire, {1}, water_time)
+    event_loop:add_coroutine("on_fire", on_fire, {2}, lava_time)
 end
+
+local on_released_fire = function ()
+    set_text()
+    gui.requestRender()
+end
+
+local on_fire_press = function (button)
+    fire_button.background_color = colors.red
+    event_loop:add_coroutine("on_released_fire", on_released_fire, nil, press_delay)
+
+    gui.requestRender()
+    if is_used_fire or is_used_water or is_used_water then
+        return
+    end
+
+    is_used_fire = true
+    event_loop:add_coroutine("on_fire", on_fire, nil, 0.2)
+end
+
+--Main things!
 
 local on_event_main_panel = function (panel, event)
     if event.type == "coroutine" then
@@ -402,32 +550,44 @@ end
 
 local update = function (loop, event)
     if event.type == "setup_create_s_r"then
-        local X, Y = config.monitor.getSize()
         local main_panel = gui.makePanel(true)
         main_panel:add_update_lisener(on_event_main_panel)
 
         --background
-        local background = gui.makeBox(1, 1, X, Y, colors.gray)
+        local background = gui.makeBox(1, 1, 0, 0, colors.gray)
+        background.flags = gui.flags.bottom + gui.flags.top + gui.flags.left + gui.flags.right
+
         --lava button
         lava_button = gui.makeButton(1, 1, "Enable: Lava", on_press_lava)
         lava_button.name = "lava_button"
         lava_button.flags = gui.flags.top + gui.flags.left
+
         --water button
         water_button = gui.makeButton(1, 1, "Enable: Water", on_press_water)
         water_button.name = "water_button"
         water_button.flags = gui.flags.top + gui.flags.right
+
         --disable button
         disable_button = gui.makeButton(-1, -1, "Disable All", on_press_disable)
         disable_button.name = "disable_button"
         disable_button.flags = gui.flags.center_horizontal + gui.flags.center_vertical
+
         --crusher button
         crusher_button = gui.makeButton(1, 1, "Enable: Crusher", on_press_crusher)
         crusher_button.name = "crusher_button"
         crusher_button.flags = gui.flags.bottom + gui.flags.left
+
         --press button
         press_button = gui.makeButton(1, 1, "Enable: Press", on_press_press)
         press_button.name = "press_button"
         press_button.flags = gui.flags.bottom + gui.flags.right
+
+        --fire button
+        fire_button = gui.makeButton(0, 1, "Enable: Fire", on_fire_press)
+        fire_button.name = "fire_button"
+        fire_button.flags = gui.flags.center_horizontal + gui.flags.top
+
+        --Set text for all buttons and drow first frame
 
         set_text()
 
@@ -438,13 +598,11 @@ local update = function (loop, event)
         main_panel:add_child(disable_button)
         main_panel:add_child(crusher_button)
         main_panel:add_child(press_button)
+        main_panel:add_child(fire_button)
         --adding main panel to gui
 
         gui:add_panel(main_panel)
         gui.monitor = config.monitor
-        --drow first frame
-
-        gui.requestRender()
         return
     end
     gui:update(event)
