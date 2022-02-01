@@ -1,4 +1,4 @@
-# Create Smelter (WIP)
+# Create Smelter
 
 ## to install to computer:
 
@@ -35,8 +35,6 @@ wire_water = wire colors
 wire_crusher = wire colors
 wire_press = wire_colors
 side = right, left, top, bottom (bundled cable side)
-
-(WIP)
 
 lava_enable = true, false
 fire_enable = true, false
