@@ -3,8 +3,8 @@ if not http then
     return
 end
 
---local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
-local _url = "http://localhost:8000/"
+local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
+--local _url = "http://localhost:8000/"
 
 local toInstall = {
     {path = "red.lua", url = _url .. "red.lua"},
