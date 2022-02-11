@@ -6,16 +6,16 @@
     Version: 0.0.2
 ]]
 
-local reader = require("reader")
+local reader = require("row_reader")
 
 local to_display = false
 local default_config = {
     display = false
 }
 
-reader.write_file("log.config", default_config, true)
+reader:write_file("log.config", default_config, true)
 
-local config = reader.read_file("log.config")
+local config = reader:read_file("log.config")
 local module = {
     name = "LOGGER no name",
     module_name = "no module name",
