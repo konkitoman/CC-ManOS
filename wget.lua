@@ -1,14 +1,23 @@
+--[[
+    Wget
+    by Konkito Man
+    
+    for: Lua Cobalt [https://github.com/SquidDev/Cobalt], CC-Tweaked, CC-ManOS [https://github.com/konkitoman/CC-ManOS]
+    LICENSE: MIT
+    Version: 0.0.1
+]]
+
 local logger = require("logger")
-logger:setName("ManOS")
-logger:setModuleName("wget")
+logger:setModuleName("ManOS")
+logger:setName("wget")
 
 if not http then
     logger:log("No http module!")
     return
 end
 
-wget = {
-    get = function(url)
+local module = {
+    get = function(self, url)
         local ok, err = http.checkURL(url)
         if not ok then
             logger:log(ok or "Invalid url!")
@@ -24,7 +33,7 @@ wget = {
         response.close()
         return data
     end,
-    downloadFile = function(url, filename_and_path)
+    downloadFile = function(self, url, filename_and_path)
         local err = nil
         if not url then
             err = "No url!\n"
@@ -39,7 +48,7 @@ wget = {
             return
         end
 
-        local res = wget.get(url)
+        local res = self:get(url)
         if not res then return end
         local file = fs.open(filename_and_path, "wb")
         if not file then
@@ -51,8 +60,8 @@ wget = {
         file.close()
         return filename_and_path
     end,
-    runUrl = function(url)
-        local res = wget.get(url)
+    runUrl = function(self, url)
+        local res = self:get(url)
         if not res then
             return
         end
@@ -67,3 +76,27 @@ wget = {
         end
     end
 }
+
+local args = { ... }
+if args[1] then
+    if args[1] ~= "wget" then
+        logger:setDisplay(true)
+        if args[1] == "run" then
+            if args[2] then
+                module:runUrl(args[2])
+            else
+                logger:log("no url!")         
+            end
+        else
+            if args[2] then
+                module:downloadFile(args[1], args[2])
+            else
+                logger:log("no filename!")
+            end
+        end
+    else
+        print(args[1])
+    end
+end
+
+return module
