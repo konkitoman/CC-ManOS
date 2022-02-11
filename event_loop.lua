@@ -71,7 +71,8 @@ local module = {
                 end
                 local event = {
                     type = type,
-                    args = args
+                    args = args,
+                    consumed = false
                 }
                 self.callback(self, event)
                 break
