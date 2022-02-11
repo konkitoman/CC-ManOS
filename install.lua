@@ -3,7 +3,7 @@ if not http then
     return
 end
 
-local _url = "https://raw.githubusercontent.com/konkitoman/ManOS/master/"
+local _url = "https://raw.githubusercontent.com/konkitoman/CC-ManOS/master/"
 --local _url = "http://localhost:8000/"
 
 local toInstall = {
