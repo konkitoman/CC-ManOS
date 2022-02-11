@@ -302,11 +302,14 @@ local module = {
                 if self.on_update then
                     self:on_update(event)
                 end
-                if event.type == "monitor_touch" then
-                    local _x = event.args[2]
-                    local _y = event.args[3]
-                    if _x >= self._x -1 and _x <= self._x + self._size_x - 1 and _y >= self._y - 1 and _y <= self._y + self._size_y - 1 then
-                        self:on_press()
+                if event.consumed == false then
+                    if event.type == "monitor_touch" then
+                        local _x = event.args[2]
+                        local _y = event.args[3]
+                        if _x >= self._x -1 and _x <= self._x + self._size_x - 1 and _y >= self._y - 1 and _y <= self._y + self._size_y - 1 then
+                            self:on_press()
+                            event.consumed = true
+                        end
                     end
                 end
             end,
