@@ -1,6 +1,6 @@
 --[[
     Logger
-    
+
     for: Lua Cobalt [https://github.com/SquidDev/Cobalt], CC-Tweaked, CC-ManOS [https://github.com/konkitoman/CC-ManOS]
     LICENSE: MIT
     Version: 0.0.2
@@ -24,9 +24,6 @@ local module = {
     setModuleName = function(self, name) self.module_name = name end,
     setDisplay = function (self, display)
         self.display = display
-        if display == true then
-            print("Logger is set to display on screen!")
-        end
     end,
     log = function (self, text, no_end_line)
         local content = nil
@@ -41,18 +38,25 @@ local module = {
         if not content then
             content = ""
         end
-        if not no_end_line then
-            content = content .. "[" .. self.module_name .. "] " .. self.name .. " " .. text .. "\n"
+
+        local add = ""
+
+        if no_end_line == true then
+            add = "[" .. self.module_name .. "] " .. self.name .. " " .. text
         else
-            content = content .. "[" .. self.module_name .. "] " .. self.name .. " " .. text
+            add = "[" .. self.module_name .. "] " .. self.name .. " " .. text .. "\n"
         end
+        content = content .. add
+
         local _file = fs.open("log.txt", "w")
         if not _file then
             print("[TheOS] Logger: Cannot create file!")
         end
-        _file.write(content)
+        _file.write(content .. "\r")
+        _file.flush()
+        _file.close()
         if self.display == true then
-            term.write(content)
+            write(add)
         end
     end
 }
