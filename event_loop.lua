@@ -1,3 +1,11 @@
+--[[
+    Event Loop
+    by Konkito Man
+
+    for: Lua Cobalt [https://github.com/SquidDev/Cobalt], CC-Tweaked, CC-ManOS [https://github.com/konkitoman/CC-ManOS]
+    LICENSE: MIT
+    Version: 0.0.1
+]]
 local module = {
     callback = nil,
     ended = false,
