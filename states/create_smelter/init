@@ -39,11 +39,11 @@ local default_config = {
 
 local createConfig = function(config)
     return {
-        wire_lava = red:from_str(config.wire_lava),
-        wire_water = red:from_str(config.wire_water),
-        wire_crusher = red:from_str(config.wire_crusher),
-        wire_press = red:from_str(config.wire_press),
-        wire_fire = red:from_str(config.wire_fire),
+        wire_lava = red.colors:from_str(config.wire_lava),
+        wire_water = red.colors:from_str(config.wire_water),
+        wire_crusher = red.colors:from_str(config.wire_crusher),
+        wire_press = red.colors:from_str(config.wire_press),
+        wire_fire = red.colors:from_str(config.wire_fire),
         lava_enable = config.lava_enable,
         fire_enable = config.fire_enable,
         water_enable = config.water_enable,
@@ -620,11 +620,12 @@ local function setup(path)
     reader.write_file(_data_path, default_data, true)
     reader.write_file(_config_path, default_config, true)
 
+    local config_data = reader.read_file(_config_path)
+    config = createConfig(config_data)
+
     local data = getData()
     red:setOutput(data.red_output)
     red:setSide(config.red_side)
-    local config_data = reader.read_file(_config_path)
-    config = createConfig(config_data)
 
     event_loop:set_callback(update)
     os.queueEvent("setup_create_s_r")
