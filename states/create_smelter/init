@@ -544,7 +544,7 @@ local on_event_main_panel = function (panel, event)
 end
 
 local update = function (loop, event)
-    if event.type == "setup_create_s_r"then
+    if event.type == "setup_create_smelter"then
         local main_panel = gui.makePanel(true)
         main_panel:add_update_lisener(on_event_main_panel)
 
@@ -628,7 +628,7 @@ local function setup(path)
     red:setSide(config.red_side)
 
     event_loop:set_callback(update)
-    os.queueEvent("setup_create_s_r")
+    os.queueEvent("setup_create_smelter")
     event_loop:run()
 end
 
