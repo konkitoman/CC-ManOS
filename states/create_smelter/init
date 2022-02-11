@@ -1,3 +1,12 @@
+--[[
+    Create Smelter
+    by Konkito Man
+
+    for: Lua Cobalt [https://github.com/SquidDev/Cobalt], CC-Tweaked, CC-ManOS [https://github.com/konkitoman/CC-ManOS]
+    LICENSE: MIT
+    Version: 0.0.1
+]]
+
 local gui = require("gui")
 local event_loop = require("event_loop")
 
@@ -59,10 +68,6 @@ local crusher_button = nil
 local press_button = nil
 local fire_button = nil
 
--- redstone bundled output
-
-local red_output = nil
-
 -- save/load data
 
 local function getData()
@@ -70,26 +75,8 @@ local function getData()
 end
 
 local function setData(data)
-    data.red_output = red_output
+    data.red_output = red.red_output
     reader.write_file(_data_path, data)
-end
-
--- redstone functions
-
-local function add_red(wire)
-    red_output = red_output + wire
-    redstone.setBundledOutput(config.red_side, red_output)
-end
-
-local function sub_red(wire)
-    red_output = red_output - wire
-    redstone.setBundledOutput(config.red_side, red_output)
-end
-
-local function toggle_red(wire)
-    add_red(wire)
-    sleep(0)
-    sub_red(wire)
 end
 
 local is_used_lava = false
@@ -193,7 +180,7 @@ local function on_lava(state)
         is_used_fire = true
     end
     if data.lava == true then
-        toggle_red(config.wire_lava)
+        red:toggle_red(config.wire_lava)
         data.lava = false
 
         setData(data)
@@ -204,7 +191,7 @@ local function on_lava(state)
         return
     end
     if data.water == true then
-        toggle_red(config.wire_water)
+        red:toggle_red(config.wire_water)
         data.water = false
         event_loop:add_coroutine("on_lava", on_lava, nil, 3)
 
@@ -213,7 +200,7 @@ local function on_lava(state)
         gui.requestRender()
         return
     end
-    toggle_red(config.wire_lava)
+    red:toggle_red(config.wire_lava)
     data.lava = true
     data.fire = false
 
@@ -255,7 +242,7 @@ local function on_water(state)
         is_used_fire = true
     end
     if data.water == true then
-        toggle_red(config.wire_water)
+        red:toggle_red(config.wire_water)
         data.water = false
 
         setData(data)
@@ -268,7 +255,7 @@ local function on_water(state)
     if data.lava == true then
         is_used_lava = true
 
-        toggle_red(config.wire_lava)
+        red:toggle_red(config.wire_lava)
         data.lava = false
         event_loop:add_coroutine("on_water", on_water, nil, 8)
 
@@ -277,7 +264,7 @@ local function on_water(state)
         gui.requestRender()
         return
     end
-    toggle_red(config.wire_water)
+    red:toggle_red(config.wire_water)
     data.water = true
     data.fire = false
 
@@ -311,29 +298,29 @@ end
 
 local function on_disable(state)
     if state then
-        toggle_red(config.wire_water)
+        red:toggle_red(config.wire_water)
         data.water = false
         data.fire = false
     end
     data = getData()
     if data.water == true then
-        toggle_red(config.wire_water)
+        red:toggle_red(config.wire_water)
         data.water = false
     end
     if data.lava == true then
-        toggle_red(config.wire_lava)
+        red:toggle_red(config.wire_lava)
         data.lava = false
     end
     if data.crusher == true then
-        sub_red(config.wire_crusher)
+        red:sub_red(config.wire_crusher)
         data.crusher = false
     end
     if data.press == true then
-        sub_red(config.wire_press)
+        red:sub_red(config.wire_press)
         data.press = false
     end
     if data.fire == true then
-        toggle_red(config.wire_water)
+        red:toggle_red(config.wire_water)
         data.water = true
         data.fire = false
         event_loop:add_coroutine("on_disable", on_disable, {1}, 2)
@@ -376,10 +363,10 @@ end
 local function on_crusher()
     data = getData()
     if data.crusher == true then
-        sub_red(config.wire_crusher)
+        red:sub_red(config.wire_crusher)
         data.crusher = false
     else
-        add_red(config.wire_crusher)
+        red:add_red(config.wire_crusher)
         data.crusher = true
     end
 
@@ -411,10 +398,10 @@ end
 local function on_press()
     data = getData()
     if data.press == true then
-        sub_red(config.wire_press)
+        red:sub_red(config.wire_press)
         data.press = false
     else
-        add_red(config.wire_press)
+        red:add_red(config.wire_press)
         data.press = true
     end
 
@@ -464,7 +451,7 @@ local function on_fire(state)
         end
         fire_state = fire_state + state
         if fire_state == 3 then
-            toggle_red(config.wire_fire)
+            red:toggle_red(config.wire_fire)
             data.fire = true
             event_loop:add_coroutine("on_fire", on_fire, {2}, 4)
 
@@ -472,7 +459,7 @@ local function on_fire(state)
             set_text()
         end
         if fire_state == 4 then
-            toggle_red(config.wire_water)
+            red:toggle_red(config.wire_water)
             data.water = false
             event_loop:add_coroutine("on_fire", on_fire, {5}, 3)
 
@@ -503,7 +490,7 @@ local function on_fire(state)
 
     if data.fire == true then
         is_used_water = true
-        toggle_red(config.wire_water)
+        red:toggle_red(config.wire_water)
         data.water = true
         event_loop:add_coroutine("on_fire", on_fire, {4}, 2)
 
@@ -514,13 +501,13 @@ local function on_fire(state)
 
     if data.water == true then
         is_used_water = true
-        toggle_red(config.wire_water)
+        red:toggle_red(config.wire_water)
         data.water = false
         water_time = 3
     end
     if data.lava == true then
         is_used_lava = true
-        toggle_red(config.wire_lava)
+        red:toggle_red(config.wire_lava)
         data.lava = false
         lava_time = 7
     end
@@ -553,9 +540,7 @@ end
 --Main things!
 
 local on_event_main_panel = function (panel, event)
-    if event.type == "coroutine" then
-        on_coroutine(event.args[1])
-    end
+
 end
 
 local update = function (loop, event)
@@ -636,10 +621,10 @@ local function setup(path)
     reader.write_file(_config_path, default_config, true)
 
     local data = getData()
-    red_output = data.red_output
+    red:setOutput(data.red_output)
+    red:setSide(config.red_side)
     local config_data = reader.read_file(_config_path)
     config = createConfig(config_data)
-    redstone.setBundledOutput(config.red_side, red_output)
 
     event_loop:set_callback(update)
     os.queueEvent("setup_create_s_r")

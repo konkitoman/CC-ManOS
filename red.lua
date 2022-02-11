@@ -1,4 +1,12 @@
-local module = {
+--[[
+    Red
+    by Konkito Man
+
+    for: Lua Cobalt [https://github.com/SquidDev/Cobalt], CC-Tweaked, CC-ManOS [https://github.com/konkitoman/CC-ManOS]
+    LICENSE: MIT
+    Version: 0.0.1
+]]
+local colors = {
     none = 0,
     white = 1,
     orange = 2,
@@ -16,6 +24,7 @@ local module = {
     green = 8192,
     red = 16384,
     black = 32768,
+
     from_str = function (self, str)
         if str == "none" then
             return 0
@@ -53,6 +62,41 @@ local module = {
             return self.black
         end
         return 0
+    end
+}
+local module = {
+    colors = colors,
+    red_output = 0,
+    side = "left",
+
+    updateRed = function (self)
+        redstone.setBundledOutput(self.side, self.red_output)
+    end,
+
+    setOutput = function (self, output)
+        self.red_output = output
+        self:updateRed()
+    end,
+
+    setSide = function (self, side)
+        self.side = side
+        self:updateRed()
+    end,
+
+    add_red = function (self, wire)
+        self.red_output = self.red_output + wire
+        self:updateRed()
+    end,
+    
+    sub_red = function (self, wire)
+        self.red_output = self.red_output - wire
+        self:updateRed()
+    end,
+    
+    toggle_red = function (self, wire)
+        self:add_red(wire)
+        sleep()
+        self:sub_red(wire)
     end
 }
 
