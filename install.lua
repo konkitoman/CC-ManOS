@@ -9,6 +9,7 @@ local _url = "https://raw.githubusercontent.com/konkitoman/CC-ManOS/master/"
 local toInstall = {
     {path = "red.lua", url = _url .. "red.lua"},
     {path = "wget.lua", url = _url .. "wget.lua"},
+    {path = "row_reader.lua", url = _url .. "row_reader.lua"},
     {path = "reader.lua", url = _url .. "reader.lua"},
     {path = "logger.lua", url = _url .. "logger.lua"},
     {path = "event_loop.lua", url = _url .. "event_loop.lua"},
