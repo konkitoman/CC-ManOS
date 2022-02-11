@@ -1,4 +1,12 @@
-require("wget")
+--[[
+    Setup
+
+    for: Lua Cobalt [https://github.com/SquidDev/Cobalt], CC-Tweaked, CC-ManOS [https://github.com/konkitoman/CC-ManOS]
+    LICENSE: MIT
+    Version: 0.0.2
+]]
+
+local wget = require("wget")
 
 local _url = "https://raw.githubusercontent.com/konkitoman/CC-ManOS/master/"
 --local _url = "http://localhost:8000/"
@@ -14,7 +22,7 @@ sleep(0)
 term.write(".")
 term.setCursorPos(1, 2)
 sleep(1)
-wget.runUrl(_url .. "install.lua")
+wget:runUrl(_url .. "install.lua")
 sleep(1)
 term.clear()
 term.setCursorPos(1, 1)
@@ -76,8 +84,8 @@ if init.name then
     local url = _url .. "states/" .. init.name
     local path = "/states/" .. init.name .. "/init"
 
-    if not wget.downloadFile(url .. "/init", path) then
-        if not wget.downloadFile(url .. "/init.lua", path) then
+    if not wget:downloadFile(url .. "/init", path) then
+        if not wget:downloadFile(url .. "/init.lua", path) then
             print("[TheOS] State Invalid name!")
             return
         end
@@ -90,7 +98,7 @@ if init.to_install then
         local length  = #init.to_install
         for i = 1, length do
             local element = init.to_install[i]
-            if not wget.downloadFile(_url .. element.res, element.path)  then
+            if not wget:downloadFile(_url .. element.res, element.path)  then
                 print("[TheOS] Failed to install: " .. element.path)
             end
         end
@@ -115,7 +123,7 @@ if run_module then
             local length = #state_init.to_install
             for i = 1, length do
                 local element = state_init.to_install[i]
-                if not wget.downloadFile(_url .. "states/" .. init.name .. "/" .. element.res, path .. element.path) then
+                if not wget:downloadFile(_url .. "states/" .. init.name .. "/" .. element.res, path .. element.path) then
                     print("[TheOS] Module Failed to install: " .. element.path)
                 end
             end
