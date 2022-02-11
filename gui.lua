@@ -1,6 +1,7 @@
 local logger = require("logger")
-logger.setModuleName("TheOS")
-logger.setName("GUI")
+logger:setModuleName("TheOS")
+logger:setName("GUI")
+logger:setDisplay(false)
 
 local types = {panel = 1, box = 2, button = 3, label = 4}
 local flags = {center_horizontal = 1, center_vertical = 2, left = 4, right = 8, top = 16, bottom = 32}
@@ -337,11 +338,11 @@ local module = {
 
     add_panel = function (self, panel)
         if not self.is_gui then
-            logger.log("self is not gui!")
+            logger:log("self is not gui!")
             return
         end
         if not panel.type == 1 then
-            logger.log("is not panel!")
+            logger:log("is not panel!")
             return
         end
 
