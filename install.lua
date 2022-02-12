@@ -23,6 +23,7 @@ local toInstall = {
     {path = "logger.lua", url = _url .. "logger.lua"},
     {path = "event_loop.lua", url = _url .. "event_loop.lua"},
     {path = "gui.lua", url = _url .. "gui.lua"},
+    {path = "commander.lua", url = _url .. "commander.lua"},
     {path = "startup", url = _url .. "startup"},
 }
 
