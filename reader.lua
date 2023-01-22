@@ -12,18 +12,19 @@ logger:setName("Reader")
 
 local row_reader = require("row_reader")
 
-row_reader.log_callback = function (text, no_nl)
-    logger:log(text, no_nl)
+row_reader.log_callback = function(text, no_nl)
+  logger:log(text, no_nl)
 end
 
 local module = {
-    read_file = function (path)
-        return row_reader:read_file(path)
-    end,
+  read_file = function(path)
+    return row_reader:read_file(path)
+  end,
 
-    write_file = function (path, data, if_not_exist)
-        return row_reader:write_file(path, data, if_not_exist)
-    end,
+  write_file = function(path, data, if_not_exist)
+    return row_reader:write_file(path, data, if_not_exist)
+  end,
 }
 
 return module
+
